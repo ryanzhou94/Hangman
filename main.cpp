@@ -28,7 +28,9 @@ void endGame(Player player);
 void flushBuffer();
 bool ifContinue();
 
-const char * wordList[] = {"blue", "red", "yellow", "black", "white", "orange", "pink", "green", "grey", "purple"};
+const char * wordList[] = {"blue", "red", "yellow", "black", "white",
+                           "orange", "pink", "green", "grey", "purple",
+                           "apple", "banana", "pear", "pineapple", "peach"};
 
 int main() {
     // initialize the random number generator seed
