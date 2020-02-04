@@ -27,6 +27,7 @@ void freePlayer(PtrToPlayer ptrToPlayer);
 int checkAvailable(const char * str, char letter);
 void endGame(Player player);
 void flushBuffer();
+bool ifContinue();
 
 const char * wordList[NUMBER_OF_WORDS] = {"blue", "red", "yellow", "black", "white"};
 
@@ -51,7 +52,7 @@ int main() {
         flushBuffer();
         // Another game?
         printf("Try again? (y/n)");
-    } while (getchar() != 'n');
+    } while (ifContinue());
 
     return 0;
 }
@@ -81,7 +82,7 @@ void initializePlayer(PtrToPlayer ptrToPlayer){
 
 // Print prompt/hints for the player
 void printPrompt(Player player){
-    printf("Guess a letter for the word: '%s'\n", player.currentGuessing);
+    printf("\nGuess a letter for the word: '%s'\n", player.currentGuessing);
     printf("You have %d wrong guesses left, and have guessed %d letters out of %lu so far.\n", player.lives, player.correctGuessing, strlen(player.realWord));
     printf("Available letters are: %s\n", player.availableList);
 }
@@ -124,13 +125,13 @@ void validateLetter(PtrToPlayer ptrToPlayer, char letter){
         }
 
         if (correct){
-            printf("*** Correct guess - '%c' IS in the word ***\n", letter);
+            printf("\n*** Correct guess - '%c' IS in the word ***\n", letter);
         } else {
             ptrToPlayer->lives--;
-            printf("!!! Wrong guess - '%c' is not in the word !!!\n", letter);
+            printf("\n!!! Wrong guess - '%c' is not in the word !!!\n", letter);
         }
     } else {
-        printf("'%c' is not a letter!\n", letter);
+        printf("'%c' is not a valid letter! Try again.\n", letter);
     }
 
 }
@@ -163,7 +164,7 @@ void endGame(Player player){
     if (player.correctGuessing == strlen(player.realWord)){
         printf("Well done! The word was '%s'. You finished with %d wrong guesses left.\n", player.realWord, player.lives);
     } else {
-        printf("Sorry! The word was '%s'. You have run out of wrong guess.\n", player.realWord);
+        printf("You failed! The word was '%s'\n", player.realWord);
     }
 }
 
@@ -172,4 +173,17 @@ void flushBuffer(){
     while (getchar() != '\n'){
 
     }
+}
+
+// Receive response from the player if he/she wants to continue the game
+bool ifContinue() {
+	char response = getchar();
+	while (response != 'y' && response != 'n') {
+		response = getchar();
+	}
+	if (response == 'y'){
+		return true;
+	} else {
+		return false;
+	}
 }
