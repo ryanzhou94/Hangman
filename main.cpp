@@ -24,8 +24,9 @@ void validateInput(PtrToPlayer ptrToPlayer);
 void validateLetter(PtrToPlayer ptrToPlayer, char letter);
 bool isLetter(char c);
 void freePlayer(PtrToPlayer ptrToPlayer);
-int checkAvailable(char * str, char letter);
+int checkAvailable(const char * str, char letter);
 void endGame(Player player);
+void flushBuffer();
 
 const char * wordList[NUMBER_OF_WORDS] = {"blue", "red", "yellow", "black", "white"};
 
@@ -46,6 +47,8 @@ int main() {
         endGame(player);
         // free the memory allocated to the player
         freePlayer(&player);
+        // flush invalid input in the input buffer
+        flushBuffer();
         // Another game?
         printf("Try again? (y/n)");
     } while (getchar() != 'n');
@@ -161,5 +164,12 @@ void endGame(Player player){
         printf("Well done! The word was '%s'. You finished with %d wrong guesses left.\n", player.realWord, player.lives);
     } else {
         printf("Sorry! The word was '%s'. You have run out of wrong guess.\n", player.realWord);
+    }
+}
+
+// Flush invalid input in the input buffer
+void flushBuffer(){
+    while (getchar() != '\n'){
+
     }
 }
