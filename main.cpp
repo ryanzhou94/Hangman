@@ -4,7 +4,6 @@
 #include <cstring>
 #include <cctype>
 
-#define NUMBER_OF_WORDS 5
 #define NUMBER_OF_LIVES 8
 
 struct player{
@@ -29,7 +28,7 @@ void endGame(Player player);
 void flushBuffer();
 bool ifContinue();
 
-const char * wordList[NUMBER_OF_WORDS] = {"blue", "red", "yellow", "black", "white"};
+const char * wordList[] = {"blue", "red", "yellow", "black", "white", "orange", "pink", "green", "grey", "purple"};
 
 int main() {
     // initialize the random number generator seed
@@ -60,6 +59,7 @@ int main() {
     return 0;
 }
 
+
 // Get a random number in the range of [0, boundary - 1]
 int getARandom(int boundary){
     return (rand() % (boundary));
@@ -71,7 +71,7 @@ void initializePlayer(PtrToPlayer ptrToPlayer){
     // TODO !!! free this memory !!!
     ptrToPlayer->availableList = strdup("abcdefghijklmnopqrstuvwxyz");
     ptrToPlayer->correctGuessing = 0;
-    ptrToPlayer->realWord = wordList[getARandom(NUMBER_OF_WORDS)];
+    ptrToPlayer->realWord = wordList[getARandom(sizeof(wordList)/ sizeof(wordList[0]))];
     int wordLength = strlen(ptrToPlayer->realWord);
 
     // TODO !!! free this memory !!!
@@ -96,7 +96,7 @@ void validateInput(PtrToPlayer ptrToPlayer){
         int letter = getchar();
         while(letter != '\n'){
             letter = tolower(letter);
-            validateLetter(ptrToPlayer, letter);
+            validateLetter(ptrToPlayer, (char)letter);
             
             if (ptrToPlayer->lives <= 0){
 				flushBuffer();
