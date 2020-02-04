@@ -37,19 +37,23 @@ int main() {
     do{
         // create a player
         Player player;
+
         // initialize the player
         initializePlayer(&player);
+
         // print prompt with player's information
         printPrompt(player);
+
         // validate input from the player
         validateInput(&player);
+
         // print prompt when the game is end
         endGame(player);
+
         // free the memory allocated to the player
         freePlayer(&player);
-        // flush invalid input in the input buffer
-        // flushBuffer();
-        // Another game?
+
+        // Another game? y: continue;   n: quit;    otherwise: keep asking
         printf("Try again? (y/n)");
     } while (ifContinue());
 
