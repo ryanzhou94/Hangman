@@ -32,7 +32,7 @@ const char * wordList[] = {"blue", "red", "yellow", "black", "white", "orange", 
 
 int main() {
     // initialize the random number generator seed
-    srand((unsigned int)time(NULL));
+    srand((unsigned int)time(nullptr));
     do{
         // create a player
         Player player;
@@ -62,25 +62,21 @@ int main() {
 
 // Get a random number in the range of [0, boundary - 1]
 int getARandom(int boundary){
-    return (rand() % (boundary));
+    return rand() % (boundary);
 }
 
 // Initialize the Player's information
 void initializePlayer(PtrToPlayer ptrToPlayer){
     ptrToPlayer->lives = NUMBER_OF_LIVES;
-    // TODO !!! free this memory !!!
     ptrToPlayer->availableList = strdup("abcdefghijklmnopqrstuvwxyz");
     ptrToPlayer->correctGuessing = 0;
     ptrToPlayer->realWord = wordList[getARandom(sizeof(wordList)/ sizeof(wordList[0]))];
-    int wordLength = strlen(ptrToPlayer->realWord);
+    ptrToPlayer->currentGuessing = (char *)malloc((strlen(ptrToPlayer->realWord) + 1) * sizeof(char));
 
-    // TODO !!! free this memory !!!
-    ptrToPlayer->currentGuessing = (char *)malloc((wordLength + 1) * sizeof(char));
-
-    for (int i = 0; i < wordLength; ++i) {
+    for (int i = 0; i < strlen(ptrToPlayer->realWord); ++i) {
         ptrToPlayer->currentGuessing[i] = '-';
     }
-    ptrToPlayer->currentGuessing[wordLength] = '\0';
+    ptrToPlayer->currentGuessing[strlen(ptrToPlayer->realWord)] = '\0';
 }
 
 // Print prompt/hints for the player
@@ -96,9 +92,8 @@ void validateInput(PtrToPlayer ptrToPlayer){
         int letter = getchar();
         while(letter != '\n'){
             letter = tolower(letter);
-            validateLetter(ptrToPlayer, (char)letter);
-            
-            if (ptrToPlayer->lives <= 0){
+            validateLetter(ptrToPlayer, letter);
+            if (ptrToPlayer->lives <= 0 || ptrToPlayer->correctGuessing == strlen(ptrToPlayer->realWord)){
 				flushBuffer();
                 return;
             }
@@ -174,21 +169,16 @@ void endGame(Player player){
 // Flush invalid input in the input buffer
 void flushBuffer(){
     while (getchar() != '\n'){
-
+        // do nothing
     }
 }
 
 // Receive response from the player if he/she wants to continue the game
 bool ifContinue() {
-	char response = getchar();
+    char response = getchar();
 	while (response != 'y' && response != 'n') {
 		response = getchar();
 	}
-	if (response == 'y'){
-        flushBuffer();
-		return true;
-	} else {
-        flushBuffer();
-		return false;
-	}
+    flushBuffer();
+    return response == 'y';
 }
