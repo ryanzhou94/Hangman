@@ -25,12 +25,13 @@ void validateLetter(PtrToPlayer ptrToPlayer, char letter);
 bool isLetter(char c);
 void freePlayer(PtrToPlayer ptrToPlayer);
 int checkAvailable(char * str, char letter);
+void endGame(Player player);
 
 const char * wordList[NUMBER_OF_WORDS] = {"blue", "red", "yellow", "black", "white"};
 
 int main() {
     // initialize the random number generator seed
-    srand(time(0));
+    srand(time(NULL));
 
     do{
         // create a player
@@ -41,6 +42,8 @@ int main() {
         printPrompt(player);
         // validate input from the player
         validateInput(&player);
+        // print prompt when the game is end
+        endGame(player);
         // free the memory allocated to the player
         freePlayer(&player);
         // Another game?
@@ -141,7 +144,7 @@ void freePlayer(PtrToPlayer ptrToPlayer){
 }
 
 // Check if a letter is in the available list, if yes then return its index in the list, otherwise return -1
-int checkAvailable(char * str, char letter){
+int checkAvailable(const char * str, char letter){
      int index = 0;
      while(str[index] != '\0'){
          if (str[index] == letter){
@@ -150,4 +153,13 @@ int checkAvailable(char * str, char letter){
          index++;
      }
      return -1;
+}
+
+// Print prompt for the end of the game
+void endGame(Player player){
+    if (player.correctGuessing == strlen(player.realWord)){
+        printf("Well done! The word was '%s'. You finished with %d wrong guesses left.\n", player.realWord, player.lives);
+    } else {
+        printf("Sorry! The word was '%s'. You have run out of wrong guess.\n", player.realWord);
+    }
 }
