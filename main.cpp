@@ -33,8 +33,7 @@ const char * wordList[NUMBER_OF_WORDS] = {"blue", "red", "yellow", "black", "whi
 
 int main() {
     // initialize the random number generator seed
-    srand(time(NULL));
-
+    srand((unsigned int)time(NULL));
     do{
         // create a player
         Player player;
