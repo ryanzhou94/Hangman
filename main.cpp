@@ -49,7 +49,7 @@ int main() {
         // free the memory allocated to the player
         freePlayer(&player);
         // flush invalid input in the input buffer
-        flushBuffer();
+        // flushBuffer();
         // Another game?
         printf("Try again? (y/n)");
     } while (ifContinue());
@@ -96,6 +96,7 @@ void validateInput(PtrToPlayer ptrToPlayer){
             validateLetter(ptrToPlayer, letter);
             printPrompt(*ptrToPlayer);
             if (ptrToPlayer->lives <= 0){
+				flushBuffer();
                 return;
             }
             letter = getchar();
@@ -182,8 +183,10 @@ bool ifContinue() {
 		response = getchar();
 	}
 	if (response == 'y'){
+        flushBuffer();
 		return true;
 	} else {
+        flushBuffer();
 		return false;
 	}
 }
