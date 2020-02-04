@@ -97,7 +97,7 @@ void validateInput(PtrToPlayer ptrToPlayer){
         while(letter != '\n'){
             letter = tolower(letter);
             validateLetter(ptrToPlayer, letter);
-            printPrompt(*ptrToPlayer);
+            
             if (ptrToPlayer->lives <= 0){
 				flushBuffer();
                 return;
@@ -112,32 +112,31 @@ void validateLetter(PtrToPlayer ptrToPlayer, char letter){
     if (isLetter(letter)){
         if (checkAvailable(ptrToPlayer->availableList, letter) != -1){
             ptrToPlayer->availableList[checkAvailable(ptrToPlayer->availableList, letter)] = '.';
+			int index = 0;
+			bool correct = false;
+			while (ptrToPlayer->realWord[index] != '\0') {
+				if (ptrToPlayer->realWord[index] == letter) {
+					correct = true;
+					ptrToPlayer->correctGuessing++;
+					ptrToPlayer->currentGuessing[index] = letter;
+				}
+				index++;
+			}
+			if (correct) {
+				printf("\n*** Correct guess - '%c' IS in the word ***\n", letter);
+			}
+			else {
+				ptrToPlayer->lives--;
+				printf("\n!!! Wrong guess - '%c' is not in the word !!!\n", letter);
+			}
         } else {
             printf("You have already guessed '%c'!\n", letter);
-            return;
         }
-        int index = 0;
-        bool correct = false;
-        while(ptrToPlayer->realWord[index] != '\0'){
-            if (ptrToPlayer->realWord[index] == letter){
-                correct = true;
-                // Todo 修改逻辑，可能会提前结束
-                ptrToPlayer->correctGuessing++;
-                ptrToPlayer->currentGuessing[index] = letter;
-            }
-            index++;
-        }
-
-        if (correct){
-            printf("\n*** Correct guess - '%c' IS in the word ***\n", letter);
-        } else {
-            ptrToPlayer->lives--;
-            printf("\n!!! Wrong guess - '%c' is not in the word !!!\n", letter);
-        }
+		printPrompt(*ptrToPlayer);
     } else {
         printf("'%c' is not a valid letter! Try again.\n", letter);
     }
-
+	
 }
 
 // Check if the character is an English letter
