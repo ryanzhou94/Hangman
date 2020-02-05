@@ -16,6 +16,7 @@ struct player{
 typedef struct player Player;
 typedef Player * PtrToPlayer;
 
+void initializeRandSeed();
 void initializePlayer(PtrToPlayer ptrToPlayer);
 int getARandom(int boundary);
 void printPrompt(Player player);
@@ -23,18 +24,19 @@ void validateInput(PtrToPlayer ptrToPlayer);
 void validateLetter(PtrToPlayer ptrToPlayer, char letter);
 bool isLetter(char c);
 void freePlayer(PtrToPlayer ptrToPlayer);
-int checkAvailable(const char * str, char letter);
+bool checkAvailable(char * str[], char letter);
 void endGame(Player player);
 void flushBuffer();
 bool ifContinue();
 
 const char * wordList[] = {"blue", "red", "yellow", "black", "white",
                            "orange", "pink", "green", "grey", "purple",
-                           "apple", "banana", "pear", "pineapple", "peach"};
+                           "apple", "banana", "pear", "pineapple", "peach",
+                           "tiger", "lion", "monkey", "frog", "bird",
+                           "car", "plane", "train", "ship", "bike"};
 
 int main() {
-    // initialize the random number generator seed
-    srand((unsigned int)time(NULL));
+    initializeRandSeed();
     do{
         // create a player
         Player player;
@@ -61,6 +63,10 @@ int main() {
     return 0;
 }
 
+// initialize the random number generator seed
+void initializeRandSeed(){
+    srand((unsigned int)time(NULL));
+}
 
 // Get a random number in the range of [0, boundary - 1]
 int getARandom(int boundary){
@@ -74,7 +80,6 @@ void initializePlayer(PtrToPlayer ptrToPlayer){
     ptrToPlayer->correctGuessing = 0;
     ptrToPlayer->realWord = wordList[getARandom(sizeof(wordList)/ sizeof(wordList[0]))];
     ptrToPlayer->currentGuessing = (char *)malloc((strlen(ptrToPlayer->realWord) + 1) * sizeof(char));
-
     for (int i = 0; i < strlen(ptrToPlayer->realWord); ++i) {
         ptrToPlayer->currentGuessing[i] = '-';
     }
@@ -107,8 +112,8 @@ void validateInput(PtrToPlayer ptrToPlayer){
 // Validate one letter: 1. whether it is a letter 2. whether it is have been guessed 3. whether it is correct
 void validateLetter(PtrToPlayer ptrToPlayer, char letter){
     if (isLetter(letter)){
-        if (checkAvailable(ptrToPlayer->availableList, letter) != -1){
-            ptrToPlayer->availableList[checkAvailable(ptrToPlayer->availableList, letter)] = '.';
+        if (checkAvailable(&(ptrToPlayer->availableList), letter)){
+//            ptrToPlayer->availableList[checkAvailable(ptrToPlayer->availableList, letter)] = '.';
 			int index = 0;
 			bool correct = false;
 			while (ptrToPlayer->realWord[index] != '\0') {
@@ -148,15 +153,16 @@ void freePlayer(PtrToPlayer ptrToPlayer){
 }
 
 // Check if a letter is in the available list, if yes then return its index in the list, otherwise return -1
-int checkAvailable(const char * str, char letter){
+bool checkAvailable(char * str[], char letter){
      int index = 0;
-     while(str[index] != '\0'){
-         if (str[index] == letter){
-             return index;
+     while(*(str[index]) != '\0'){
+         if (*(str[index]) == letter){
+             *(str[index]) = '.';
+             return true;
          }
          index++;
      }
-     return -1;
+     return false;
 }
 
 // Print prompt for the end of the game
