@@ -33,7 +33,9 @@ const char * wordList[] = {"blue", "red", "yellow", "black", "white",
                            "orange", "pink", "green", "grey", "purple",
                            "apple", "banana", "pear", "pineapple", "peach",
                            "tiger", "lion", "monkey", "frog", "bird",
-                           "car", "plane", "train", "ship", "bike"};
+                           "car", "plane", "train", "ship", "bike",
+                           "steak", "pie", "chicken", "beef", "fish",
+                           "memory", "disk", "bug", "thread", "process"};
 
 int main() {
     initializeRandSeed();
