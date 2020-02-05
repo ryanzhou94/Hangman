@@ -16,7 +16,7 @@ struct player{
 typedef struct player Player;
 typedef Player * PtrToPlayer;
 
-void initializeRandSeed();
+void initializeRandSeed(int argc, char * argv[]);
 void initializePlayer(PtrToPlayer ptrToPlayer);
 int getARandom(int boundary);
 void printPrompt(Player player);
@@ -36,9 +36,11 @@ const char * wordList[] = {"blue", "red", "yellow", "black", "white",
                            "car", "plane", "train", "ship", "bike",
                            "steak", "pie", "chicken", "beef", "fish",
                            "memory", "disk", "bug", "thread", "process"};
+int main(int argc, char *argv[]) {
 
-int main() {
-    initializeRandSeed();
+    // initialize the random number generator seed
+    initializeRandSeed(argc, argv);
+
     do{
         // create a player
         Player player;
@@ -66,8 +68,16 @@ int main() {
 }
 
 // initialize the random number generator seed
-void initializeRandSeed(){
-    srand((unsigned int)time(NULL));
+void initializeRandSeed(int argc, char * argv[]){
+    if (argc == 1){
+        srand((unsigned int)time(NULL));
+    } else if (argc == 2){
+        srand((unsigned int)atoi(argv[1]));
+    } else {
+        perror("Too many arguments, please input zero or one integer seed\n");
+        exit(1);
+    }
+
 }
 
 // Get a random number in the range of [0, boundary - 1]
