@@ -24,7 +24,7 @@ void validateInput(PtrToPlayer ptrToPlayer);
 void validateLetter(PtrToPlayer ptrToPlayer, char letter);
 bool isLetter(char c);
 void freePlayer(PtrToPlayer ptrToPlayer);
-bool checkAvailable(char * str[], char letter);
+int checkAvailable(const char * str, char letter);
 void endGame(Player player);
 void flushBuffer();
 bool ifContinue();
@@ -112,8 +112,8 @@ void validateInput(PtrToPlayer ptrToPlayer){
 // Validate one letter: 1. whether it is a letter 2. whether it is have been guessed 3. whether it is correct
 void validateLetter(PtrToPlayer ptrToPlayer, char letter){
     if (isLetter(letter)){
-        if (checkAvailable(&(ptrToPlayer->availableList), letter)){
-//            ptrToPlayer->availableList[checkAvailable(ptrToPlayer->availableList, letter)] = '.';
+        if (checkAvailable(ptrToPlayer->availableList, letter) != -1){
+            ptrToPlayer->availableList[checkAvailable(ptrToPlayer->availableList, letter)] = '.';
 			int index = 0;
 			bool correct = false;
 			while (ptrToPlayer->realWord[index] != '\0') {
@@ -153,16 +153,15 @@ void freePlayer(PtrToPlayer ptrToPlayer){
 }
 
 // Check if a letter is in the available list, if yes then return its index in the list, otherwise return -1
-bool checkAvailable(char * str[], char letter){
+int checkAvailable(const char * str, char letter){
      int index = 0;
-     while(*(str[index]) != '\0'){
-         if (*(str[index]) == letter){
-             *(str[index]) = '.';
-             return true;
+     while(str[index] != '\0'){
+         if (str[index] == letter){
+             return index;
          }
          index++;
      }
-     return false;
+     return -1;
 }
 
 // Print prompt for the end of the game
